@@ -4,7 +4,7 @@
 
 分为2个Section，第一部分展示activate之前的数据，第二个Section展示activate之后的数据；
 
-<img src="D:\My_WorkSpace\ShowTrace\target.png" style="zoom:50%;" />
+<img src=".\resource\target.png" style="zoom:50%;" />
 
 ## Section 1
 
