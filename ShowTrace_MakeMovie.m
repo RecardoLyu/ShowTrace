@@ -17,11 +17,11 @@ clear, clc;
 image_write = 0;%1就保存图像数据
 save_size = [1052 1052];% 最终保存的图像大小，wh(xy)，空矩阵就表示原始大小
 fps = 20;%播放速度
-% ColorMap = hot(256);
 ReloadDataFlag = 1;
 first_time = 1;
 ifROI = 0;
 make_video = 1;
+savejpeg = 1;
 section_all = [1 2];% the demo is divided for 2 sections as below
 %1 shows a static image for 40 frames, which is before activation
 %2 shows dynamic images for 113 frames, which is after activation
@@ -202,8 +202,10 @@ for section_ii = section_all
                 hold on;
             end
         end
+        if savejpeg == 1
         f = getframe(h_fig); 
         imwrite(f.cdata,[DataPath,'frame_save\image_',num2str(section_ii),'_',num2str(frame_showfig,'%03d'),'.jpg']); 
+        end
         if image_write==1
             frame=getframe(gcf);
             frame_save=frame.cdata;

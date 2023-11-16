@@ -71,4 +71,9 @@ text_cb{2} = '0';%colorbar 上限
 text_cb_x(2) = 0.95;
 text_cb_y(2) = 0.972;
 
+ROI4Zoom_in = [212    91
+               604   458]
+ROI4Activation = [227   283
+                  491   451]
+
 fprintf('Finish\n')
