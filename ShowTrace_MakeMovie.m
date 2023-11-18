@@ -7,15 +7,15 @@
 % v3.0, complete the trace display, 9/11/2023
 % v3.1, change the distributed trace point into Cubic spline interpolation locus, 10/11/2023
 % v3.2, save JPEG frame directly, to speed up and visualize the result.
-% v3.3,
+% v3.3
 %% Preparations
 close all;
 clear, clc;
 
 %% Set some parameters
-% test = [-2 10]; % 两个数字分别是段数和段内帧数，第一个数字大于1就进入test模式
 image_write = 0;%1就保存图像数据
 save_size = [1052 1052];% 最终保存的图像大小，wh(xy)，空矩阵就表示原始大小
+enlarged_size = [900 1600];
 fps = 20;%播放速度
 ReloadDataFlag = 1;
 first_time = 1;
@@ -28,6 +28,7 @@ section_all = [1 2];% the demo is divided for 2 sections as below
 
 zoom_times = 1;
 CropMode = 'c';%center模式：四个数字，前2定中心坐标，后2定ROI，数字也是image-J读取
+
 %% Run these scripts to set parameters
 ShowTrace_SetDataPath;
 ShowTrace_DefineSection;
@@ -41,8 +42,8 @@ if ReloadDataFlag == 1
     file_need_all_temp=[];
     frame_raw_end_all=[];
     for section_ii = section_all
-        file_need_all_temp=[file_need_all_temp,file_need{section_ii}];
-        frame_raw_end_all=[frame_raw_end_all,frame_raw_end{section_ii}];
+        file_need_all_temp=[file_need_all_temp, file_need{section_ii}];
+        frame_raw_end_all=[frame_raw_end_all, frame_raw_end{section_ii}];
     end
     file_need=unique(file_need_all_temp(1,:));
 
@@ -97,7 +98,7 @@ for section_ii = section_all
         % -----------------------------------------------------------
         if section_ii==1
             % intensity cut and size crop
-            before_data_adjust = imgintensity_cut(data{1}(:,:,frame_raw),gray_range_statistic(1,1),8*gray_range_statistic(1,2),gamma(1),1);%灰度分布0-1
+            before_data_adjust = imgintensity_cut(data{1}(:,:,frame_raw),gray_range_statistic(1,1),65535,gamma(1),1);%灰度分布0-1
             before_data_adjust = img_crop(before_data_adjust,crop_info(frame_showfig,:),CropMode,1);
             before_data_adjust = repmat(before_data_adjust,1,1,3);
             % [Ny, Nx, ~] = size(before_data_adjust);
@@ -204,7 +205,12 @@ for section_ii = section_all
         end
         if savejpeg == 1
         f = getframe(h_fig); 
-        imwrite(f.cdata,[DataPath,'frame_save\image_',num2str(section_ii),'_',num2str(frame_showfig,'%03d'),'.jpg']); 
+        f_small = f.cdata;
+        % size(f_small)
+        f_small = imresize(f_small, [900 900], "bicubic");
+        f_enlarge = uint8(zeros([enlarged_size 3]));
+        f_enlarge(:,351:1250,:) = f_small(:,:,:);
+        imwrite(f_enlarge,[DataPath,'frame_save\image_900',num2str(section_ii),'_',num2str(frame_showfig,'%03d'),'.jpg']); 
         end
         if image_write==1
             frame=getframe(gcf);

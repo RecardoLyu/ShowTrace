@@ -1,5 +1,6 @@
 %% Define the charactors in the Video
 % v0.0 Yunhui Lv, developed on QC's work, 10/27/2023
+% v3.3, upgrade the Chars
 fprintf('DefineChar\n')
 TotalFrame = 0;
 for i = 1:size(frame_showfig_amount,2)
@@ -8,13 +9,13 @@ end
 Font_Size_tl(1:TotalFrame)=18;%字体大小
 % x grows from left to right, ranging from 0 to 1
 % y grows from top to bottom, ranging from 0 to 1
-text_left{1}='Before Activation';%不动的Before Activation
+text_left{1}='Before activation';%不动的Before Activation
 tl_scale_x1{1}(1:TotalFrame) = 0.5;%x的1 表示最右边
 tl_scale_x2{1}(1:TotalFrame) = 0.5;
 tl_scale_y{1}(1:TotalFrame) = 0.05;%y的1 表示最下边
 tl_color{1}=[255 255 255]/255;%紫色[255,0,255]；绿色[0,255,0]；灰色[255,255,255]
 
-text_left{2}='After Activation';%播放的After Activation
+text_left{2}='After 405nm activation';%播放的After Activation
 tl_scale_x1{2}(1:TotalFrame) = 0.5;
 tl_scale_x2{2}(1:TotalFrame) = 0.5;
 tl_scale_y{2}(1:TotalFrame) = 0.05;%第一段文字的坐标
