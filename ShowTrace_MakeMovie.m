@@ -7,7 +7,8 @@
 % v3.0, complete the trace display, 9/11/2023
 % v3.1, change the distributed trace point into Cubic spline interpolation locus, 10/11/2023
 % v3.2, save JPEG frame directly, to speed up and visualize the result.
-% v3.3
+% v3.4, adjust the width of trace
+% v3.5, change the size of video into 16:9
 %% Preparations
 close all;
 clear, clc;

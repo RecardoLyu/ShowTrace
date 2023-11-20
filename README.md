@@ -30,18 +30,18 @@ Title：；
 
 ## 2023年11月16日新增要求：
 
-- 修改每段text：activate首字母小写，加上activate wavelength=405nm；
+- ~~修改每段text：activate首字母小写，加上activate wavelength=405nm；~~
 
 - 增加一段：用线标识激活区域，持续1~2s；
 
-- 后续增加ROI_Zoomin和ROI_Activate；
+- ~~后续增加ROI_Zoomin和ROI_Activate；~~
 
 - 实现Zoom in；
 
 - 加粗加密绘制的曲线，调整ColorMap，增大对比度；
 
-- 初始帧亮度降低；
+- ~~初始帧亮度降低；~~
 
 ## 2023年11月17日增加要求：
 
-- 更改画面比例为16：9，画面填充在中间，其余背景部分黑色填充
+- ~~更改画面比例为16：9，画面填充在中间，其余背景部分黑色填充~~

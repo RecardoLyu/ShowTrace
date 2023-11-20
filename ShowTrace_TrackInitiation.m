@@ -1,18 +1,8 @@
 %% merge the track data
-% track_data_path = 'D:\My_WorkSpace\ShowTrace\Data\after\'
-% track_data_List  = dir(fullfile(track_data_path, '*.csv'));
-% track_data_file_names = {track_data_List.name}';
-% % track_data = cell(size(track_data_file_names));
-% track_data = [];
-% for i = 1 : size(track_data_file_names, 1)
-% track_data = [track_data; readmatrix([track_data_path,track_data_file_names{i}])];
-% end
-% save([track_data_path,'track_data.mat'],"track_data",'-mat')
-% clc;
-% clear;
-% fclose all;
+% v3.4, adjust the width of trace
 fprintf('TrackInitiation...\n')
 Track_data = load(TrackPath,'-mat').track_data;
+Track_data = adjust_trace_width(Track_data(:,1:4));
 %% define the colormat of the trace
 maxTrackSpots = 113;
 maxColorNum = maxTrackSpots * 3;

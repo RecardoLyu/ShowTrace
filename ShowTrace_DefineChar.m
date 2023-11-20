@@ -9,7 +9,7 @@ end
 Font_Size_tl(1:TotalFrame)=18;%字体大小
 % x grows from left to right, ranging from 0 to 1
 % y grows from top to bottom, ranging from 0 to 1
-text_left{1}='Before activation';%不动的Before Activation
+text_left{1}='Before 405nm activation';%不动的Before Activation
 tl_scale_x1{1}(1:TotalFrame) = 0.5;%x的1 表示最右边
 tl_scale_x2{1}(1:TotalFrame) = 0.5;
 tl_scale_y{1}(1:TotalFrame) = 0.05;%y的1 表示最下边
