@@ -32,13 +32,13 @@ Title：；
 
 - ~~修改每段text：activate首字母小写，加上activate wavelength=405nm；~~
 
-- 增加一段：用线标识激活区域，持续1~2s；
+- ~~增加一段：用线标识激活区域，持续1~2s；~~
 
 - ~~后续增加ROI_Zoomin和ROI_Activate；~~
 
 - 实现Zoom in；
 
-- 加粗加密绘制的曲线，调整ColorMap，增大对比度；
+- ~~加粗~~加密绘制的曲线，~~调整ColorMap~~，增大对比度；
 
 - ~~初始帧亮度降低；~~
 

@@ -1,6 +1,7 @@
 %% Define the charactors in the Video
 % v0.0 Yunhui Lv, developed on QC's work, 10/27/2023
 % v3.3, upgrade the Chars
+% v3.6, add Section 3
 fprintf('DefineChar\n')
 TotalFrame = 0;
 for i = 1:size(frame_showfig_amount,2)
@@ -18,8 +19,15 @@ tl_color{1}=[255 255 255]/255;%紫色[255,0,255]；绿色[0,255,0]；灰色[255,
 text_left{2}='After 405nm activation';%播放的After Activation
 tl_scale_x1{2}(1:TotalFrame) = 0.5;
 tl_scale_x2{2}(1:TotalFrame) = 0.5;
-tl_scale_y{2}(1:TotalFrame) = 0.05;%第一段文字的坐标
+tl_scale_y{2}(1:TotalFrame) = 0.05;%第2段文字的坐标
 tl_color{2}=[255,255,255]/255;%紫色[255,0,255]；绿色[0,255,0]；灰色[255,255,255]
+
+
+text_left{3} = "ROI of 405nm activation"; % 固定播放2s的激发区域然后Zoom in到ROI
+tl_scale_x1{3}(1:TotalFrame) = 0.5;
+tl_scale_x2{3}(1:TotalFrame) = 0.5;
+tl_scale_y{3}(1:TotalFrame) = 0.05;%第3段文字的坐标
+tl_color{3}=[255,255,255]/255;%紫色[255,0,255]；绿色[0,255,0]；灰色[255,255,255]
 
 % ---------------------------------------------
 %                     时间参数
@@ -68,13 +76,14 @@ text_cb{1} = '113';%colorbar 上限
 text_cb_x(1) = 0.95;
 text_cb_y(1) = 0.603;
 
-text_cb{2} = '0';%colorbar 上限
+text_cb{2} = '0';%colorbar 下限
 text_cb_x(2) = 0.95;
 text_cb_y(2) = 0.972;
 
+% ROI
 ROI4Zoom_in = [212    91
-               604   458]
+               604   458];
 ROI4Activation = [227   283
-                  491   451]
+                  491   451];
 
 fprintf('Finish\n')

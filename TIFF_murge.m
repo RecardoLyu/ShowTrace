@@ -3,32 +3,6 @@ clear;clc;
 close all;
 fclose all;
 
-% NAME = 'NAME';
-% path =[pwd, '\',NAME,'\'];%注意文件夹路径的选取，注意该文件夹下需要大量图片，以方便做成动画效果
-% %pwd代表当前路径
-% dir1 = dir(fullfile(path,'*.tiff'));%如果是别的格式，把这里的tiff改掉。
-% fmat=moviein(length(dir1));%动画帧数
-%
-% for i = 1:length(dir1)
-%     img = imread([path dir1(i).name]);
-%     %img = rgb2gray(img);
-%     imshow(img);title(dir1(i).name);
-%     fmat(:,i)=getframe;
-%     if i==length(dir1)%第一张图可能出现cdata与其他图像纬度不一致的问题（因为图像太大），此处统一大小。
-%         img=imread([path dir1(1).name]);
-%         imshow(img);
-%         fmat(:,1)=getframe;
-%     end
-% end
-% movie(fmat,1,1);
-% %生成视频的参数设定
-%  NAME_avi=VideoWriter([NAME,'.avi']);%avi名称
-%  NAME_avi.FrameRate=0.75;%播放速度
-%  open(NAME_avi);
-%  writeVideo(NAME_avi,fmat);
-%  close(NAME_avi)
-%
-% %}
 %% merge the track data
 track_data_path = 'D:\My_WorkSpace\ShowTrace\Data\after\'
 track_data_List  = dir(fullfile(track_data_path, '*.csv'));
@@ -52,12 +26,11 @@ data(:,:,3,:) = data_temp(:,:,3:3:339);
 
 %% reshape
 % 最大值合成
-% data_save(:,:,:) = uint16(max(data(),[],3));
+data_save(:,:,:) = uint16(max(data(),[],3));
 % 平均值合成
-data_save(:,:,:) = uint16(round(mean(data,3)));
+% data_save(:,:,:) = uint16(round(mean(data,3)));
 disp(['Size of data=',num2str(size(data_save))])
-% tif_temp = Tiff(filePath{i});
-% data{i} = tif_temp.read();
+
 %% intensity check
 gray_range_statistic = [];
 

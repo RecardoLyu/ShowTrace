@@ -9,6 +9,7 @@
 % v3.2, save JPEG frame directly, to speed up and visualize the result.
 % v3.4, adjust the width of trace
 % v3.5, change the size of video into 16:9
+% v3.6, add Section 3
 %% Preparations
 close all;
 clear, clc;
@@ -23,10 +24,10 @@ first_time = 1;
 ifROI = 0;
 make_video = 1;
 savejpeg = 1;
-section_all = [1 2];% the demo is divided for 2 sections as below
+section_all = [1 3 2];% the demo is divided for 2 sections as below
 %1 shows a static image for 40 frames, which is before activation
 %2 shows dynamic images for 113 frames, which is after activation
-
+section_cnt = 1;
 zoom_times = 1;
 CropMode = 'c';%center模式：四个数字，前2定中心坐标，后2定ROI，数字也是image-J读取
 
@@ -106,7 +107,14 @@ for section_ii = section_all
             % data_color = ColorMap(floor(before_data_adjust(:)*255)+1,:);
             data_color = before_data_adjust;
             % data_color = imresize(data_color,[save_size(2) save_size(1)],'bicubic');
-
+        % -----------------------------------------------------------
+        % Section3: Show ROI
+        % -----------------------------------------------------------
+        elseif section_ii == 3
+            ROI_data = imgintensity_cut(data{2}(:,:,frame_raw), gray_range_statistic(1,1),65535,gamma(1),1);% 调整灰度分布
+            ROI_data = img_crop(ROI_data,crop_info(frame_showfig,:),CropMode,1);
+            ROI_data = repmat(ROI_data,1,1,3);
+            data_color = ROI_data;
         % -----------------------------------------------------------
         % Section2 : 持续播放并且跟踪光点点
         % -----------------------------------------------------------
@@ -137,12 +145,6 @@ for section_ii = section_all
                         after_data_adjust(xx(i),yy(i),:) = ColorMap(tt(i),:);
                     end
                 end
-                % % 以下测试用 免bug
-                % %**********************
-                % for spot_idx = 1: num_spots{frame_raw, 1}
-                %     after_data_adjust(data_draw{frame_raw}(spot_idx, 4),data_draw{frame_raw}(spot_idx, 3),:) = ColorMap(data_draw{frame_raw}(spot_idx,2),:);
-                % end
-                % %*********************
             end
             data_color = after_data_adjust;
         end
@@ -183,7 +185,11 @@ for section_ii = section_all
         %     Scale_bar(pd,length{section_ii}(frame_showfig,Sbar_num),LineWidth(frame_showfig,Sbar_num),Nx*zoom_times,Ny*zoom_times,(x_scale(frame_showfig)+x_scale_offset(Sbar_num)),y_scale(frame_showfig),bar_color,text_visible,Font_name,Font_Size_Sb(frame_showfig,Sbar_num),text_offset)%自创子函数
         %     hold on
         % end
-
+        % 标记ROI
+        if section_ii == 3
+            line([ROI4Activation(1,1),ROI4Activation(1,1),ROI4Activation(2,1),ROI4Activation(2,1),ROI4Activation(1,1)], ...
+                 [ROI4Activation(1,2),ROI4Activation(2,2),ROI4Activation(2,2),ROI4Activation(1,2),ROI4Activation(1,2)],'Color','red','LineStyle','--','LineWidth',1.5)
+        end
         % 标记文字
         for Char_temp=1:numel(section_char{section_ii}(:,1)) %显示所有需要显示的文字
             Char_ii=section_char{section_ii}(Char_temp,1);%当前需要显示那段文字
@@ -211,7 +217,7 @@ for section_ii = section_all
         f_small = imresize(f_small, [900 900], "bicubic");
         f_enlarge = uint8(zeros([enlarged_size 3]));
         f_enlarge(:,351:1250,:) = f_small(:,:,:);
-        imwrite(f_enlarge,[DataPath,'frame_save\image_900',num2str(section_ii),'_',num2str(frame_showfig,'%03d'),'.jpg']); 
+        imwrite(f_enlarge,[DataPath,'frame_save\image_900_',num2str(section_cnt),'_',num2str(frame_showfig,'%03d'),'.jpg']); 
         end
         if image_write==1
             frame=getframe(gcf);
@@ -254,7 +260,7 @@ for section_ii = section_all
         end
 
     end
-
+section_cnt = section_cnt + 1;
 end
 
 if make_video == 1
