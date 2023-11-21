@@ -36,7 +36,7 @@ Title：；
 
 - ~~后续增加ROI_Zoomin和ROI_Activate；~~
 
-- 实现Zoom in；
+- 实现Zoom in，这里还需要加一段Section 4——考虑先画线再最后直接Zoom in
 
 - ~~加粗~~加密绘制的曲线，~~调整ColorMap~~，增大对比度；
 
