@@ -29,29 +29,29 @@ else
     
     %分割并输出
     if crop_mode==1 %要小图
-        if img_dims==2;
+        if img_dims==2
             img_out=img_in(column1:column2,row1:row2);
-        elseif img_dims==3;
+        elseif img_dims==3
             img_out=img_in(column1:column2,row1:row2,:);
-        elseif img_dims==4;
+        elseif img_dims==4
             img_out=img_in(column1:column2,row1:row2,:,:);
-        elseif img_dims==5;
+        elseif img_dims==5
             img_out=img_in(column1:column2,row1:row2,:,:,:);
-        elseif img_dims==6;
+        elseif img_dims==6
             img_out=img_in(column1:column2,row1:row2,:,:,:,:);
         end
     elseif crop_mode==2 %要填充了0的大图
         img_out=img_in;
         img_out(:)=0;
-        if img_dims==2;
+        if img_dims==2
             img_out(column1:column2,row1:row2)=img_in(column1:column2,row1:row2);
-        elseif img_dims==3;
+        elseif img_dims==3
             img_out(column1:column2,row1:row2,:)=img_in(column1:column2,row1:row2,:);
-        elseif img_dims==4;
+        elseif img_dims==4
             img_out(column1:column2,row1:row2,:,:)=img_in(column1:column2,row1:row2,:,:);
-        elseif img_dims==5;
+        elseif img_dims==5
             img_out(column1:column2,row1:row2,:,:,:)=img_in(column1:column2,row1:row2,:,:,:);
-        elseif img_dims==6;
+        elseif img_dims==6
             img_out(column1:column2,row1:row2,:,:,:,:)=img_in(column1:column2,row1:row2,:,:,:,:);
         end        
     end   

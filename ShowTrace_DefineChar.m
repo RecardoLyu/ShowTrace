@@ -11,21 +11,21 @@ Font_Size_tl(1:TotalFrame)=18;%字体大小
 % x grows from left to right, ranging from 0 to 1
 % y grows from top to bottom, ranging from 0 to 1
 text_left{1}='Before 405nm activation';%不动的Before Activation
-tl_scale_x1{1}(1:TotalFrame) = 0.5;%x的1 表示最右边
-tl_scale_x2{1}(1:TotalFrame) = 0.5;
+tl_scale_x1{1}(1:TotalFrame) = 0.25;%x的1 表示最右边
+tl_scale_x2{1}(1:TotalFrame) = 0.25;
 tl_scale_y{1}(1:TotalFrame) = 0.05;%y的1 表示最下边
 tl_color{1}=[255 255 255]/255;%紫色[255,0,255]；绿色[0,255,0]；灰色[255,255,255]
 
-text_left{2}='After 405nm activation';%播放的After Activation
-tl_scale_x1{2}(1:TotalFrame) = 0.5;
-tl_scale_x2{2}(1:TotalFrame) = 0.5;
+text_left{2}='After 405 nm activation';%播放的After Activation
+tl_scale_x1{2}(1:TotalFrame) = 0.25;
+tl_scale_x2{2}(1:TotalFrame) = 0.25;
 tl_scale_y{2}(1:TotalFrame) = 0.05;%第2段文字的坐标
 tl_color{2}=[255,255,255]/255;%紫色[255,0,255]；绿色[0,255,0]；灰色[255,255,255]
 
 
-text_left{3} = "ROI of 405nm activation"; % 固定播放2s的激发区域然后Zoom in到ROI
-tl_scale_x1{3}(1:TotalFrame) = 0.5;
-tl_scale_x2{3}(1:TotalFrame) = 0.5;
+text_left{3} = "ROI of 405 nm activation"; % 固定播放2s的激发区域然后Zoom in到ROI
+tl_scale_x1{3}(1:TotalFrame) = 0.25;
+tl_scale_x2{3}(1:TotalFrame) = 0.25;
 tl_scale_y{3}(1:TotalFrame) = 0.05;%第3段文字的坐标
 tl_color{3}=[255,255,255]/255;%紫色[255,0,255]；绿色[0,255,0]；灰色[255,255,255]
 
@@ -61,10 +61,10 @@ text_offset = 25;%文字跟bar间隔多远
 % ---------------------------------------------
 %                colorbar相关
 % ---------------------------------------------
-ColorBar_width = 40; %colorbar的宽度
+ColorBar_width = 30; %colorbar的宽度
 ColorBar_height = 350; %colorbar的高度
-ColorBar_dispx = 30; %colorbar与底角的距离
-ColorBar_dispy = 50; %colorbar与底角的距离
+ColorBar_dispx = 40; %colorbar与底边的距离
+ColorBar_dispy = 30; %colorbar与右边的距离
 
 text_cb_fontsize = 17;
 
@@ -74,16 +74,12 @@ text_cb_y = zeros(1,2);
 
 text_cb{1} = '113';%colorbar 上限
 text_cb_x(1) = 0.95;
-text_cb_y(1) = 0.603;
+text_cb_y(1) = 0.53;
 
 text_cb{2} = '0';%colorbar 下限
 text_cb_x(2) = 0.95;
-text_cb_y(2) = 0.972;
+text_cb_y(2) = 0.98;
 
-% ROI
-ROI4Zoom_in = [212    91
-               604   458];
-ROI4Activation = [227   283
-                  491   451];
+
 
 fprintf('Finish\n')

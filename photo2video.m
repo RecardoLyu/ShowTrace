@@ -1,6 +1,6 @@
 %% 把 new_main_dir 中存好的图片制作成视频
 
-video_name = [DataPath 'Movie-v3.6-section-' replace(num2str(section_all),'  ','-') '.mp4'];
+video_name = [DataPath 'Movie-v4.2-section-' replace(num2str(section_all),'  ','-') '.mp4'];
 
 animation = VideoWriter(video_name,'MPEG-4');%待合成的视频(不仅限于avi格式)的文件路径
 %%%%%%%%%%%%%%%%%%%%

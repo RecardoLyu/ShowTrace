@@ -10,6 +10,8 @@
 % v3.4, adjust the width of trace
 % v3.5, change the size of video into 16:9
 % v3.6, add Section 3
+% v3.8, enlarge the Density of Points
+% v4.1, add a Gaussian window
 %% Preparations
 close all;
 clear, clc;
@@ -29,6 +31,7 @@ section_all = [1 3 2];% the demo is divided for 2 sections as below
 %2 shows dynamic images for 113 frames, which is after activation
 section_cnt = 1;
 zoom_times = 1;
+attenuation_rate = 3;
 CropMode = 'c';%center模式：四个数字，前2定中心坐标，后2定ROI，数字也是image-J读取
 
 %% Run these scripts to set parameters
@@ -106,15 +109,24 @@ for section_ii = section_all
             % [Ny, Nx, ~] = size(before_data_adjust);
             % data_color = ColorMap(floor(before_data_adjust(:)*255)+1,:);
             data_color = before_data_adjust;
-            % data_color = imresize(data_color,[save_size(2) save_size(1)],'bicubic');
+            data_color = imresize(data_color,[900 900],'bicubic');
         % -----------------------------------------------------------
         % Section3: Show ROI
         % -----------------------------------------------------------
         elseif section_ii == 3
             ROI_data = imgintensity_cut(data{2}(:,:,frame_raw), gray_range_statistic(1,1),65535,gamma(1),1);% 调整灰度分布
-            ROI_data = img_crop(ROI_data,crop_info(frame_showfig,:),CropMode,1);
             ROI_data = repmat(ROI_data,1,1,3);
             data_color = ROI_data;
+            data_color = fix(data_color .* 255);
+            fig_3 = figure('Visible', 'off');
+            imshow(uint8(data_color),[],'Border','tight','InitialMagnification',100)
+            line([ROI4Activation(1,1),ROI4Activation(1,1),ROI4Activation(2,1),ROI4Activation(2,1),ROI4Activation(1,1)], ...
+                [ROI4Activation(1,2),ROI4Activation(2,2),ROI4Activation(2,2),ROI4Activation(1,2),ROI4Activation(1,2)],'Color','red','LineStyle','--','LineWidth',1.5)
+            f = getframe(fig_3);
+            data_color = double(f.cdata);
+            data_color = data_color ./ 255;
+            data_color = img_crop(data_color,crop_info(frame_showfig,:),CropMode,1);
+            data_color = imresize(data_color, [900 900], "bicubic");
         % -----------------------------------------------------------
         % Section2 : 持续播放并且跟踪光点点
         % -----------------------------------------------------------
@@ -122,6 +134,13 @@ for section_ii = section_all
             % intensity cut and size crop
             after_data_adjust = imgintensity_cut(data{2}(:,:,frame_raw),gray_intensity(1),gray_intensity(2),gamma(2),1);%灰度分布0-1
             after_data_adjust = img_crop(after_data_adjust,crop_info(frame_showfig,:),CropMode,1);
+            % 加上高斯窗调制幅度:中心在activation的中间，范围是Zoom in的区域
+            I_before = after_data_adjust(ROI4Zoom_in(1,1): ROI4Zoom_in(2,1),ROI4Zoom_in(1,2): ROI4Zoom_in(2,2));
+            after_data_adjust(ROI4Zoom_in(1,1): ROI4Zoom_in(2,1),ROI4Zoom_in(1,2): ROI4Zoom_in(2,2)) = after_data_adjust(ROI4Zoom_in(1,1): ROI4Zoom_in(2,1),ROI4Zoom_in(1,2): ROI4Zoom_in(2,2)).* mask_gaussian;
+            % I_after = after_data_adjust(ROI4Zoom_in(1,1): ROI4Zoom_in(2,1),ROI4Zoom_in(1,2): ROI4Zoom_in(2,2));
+            % I_before = uint8(fix(I_before*255));
+            % I_after = uint8(fix(I_after*255));
+            % figure(),subplot(1,2,1),imshow(I_before),subplot(1,2,2),imshow(I_after)
             after_data_adjust = repmat(after_data_adjust,1,1,3);
             % overwrite the pixel with the color determined by ColorMap and our data_draw
             if frame_raw == 1
@@ -135,30 +154,45 @@ for section_ii = section_all
                 for curve_id = 1: curve_num
                     % single curve 保存的是每条曲线当前的点的数量
                     single_curve{curve_id} = data_draw{frame_raw}(data_draw{frame_raw}(:,1)==num_spots{frame_raw, 2}(curve_id),:);
-                    % 生成插值后的节点
-                    [xx, yy, tt] = my_interp(single_curve{curve_id}(:,4),single_curve{curve_id}(:,3),3.*single_curve{curve_id}(:,2) - 2,2);
+                    % 生成插值后的节点——xx:x坐标
+                    [xx, yy, tt] = my_interp(single_curve{curve_id}(:,4),single_curve{curve_id}(:,3),10.*single_curve{curve_id}(:,2) - 2,9);
                     xx = round(xx);
                     yy = round(yy);
                     tt = round(tt);
+                    track_tmp = adjust_trace_width([xx, yy, tt]);
+                    xx = track_tmp(:,1);
+                    yy = track_tmp(:,2);
+                    tt = track_tmp(:,3);
                     % draw a continuous line
                     for i = 1: numel(xx)
                         after_data_adjust(xx(i),yy(i),:) = ColorMap(tt(i),:);
                     end
-                end
+                end           
             end
             data_color = after_data_adjust;
-        end
-
-        [Ny, Nx, ~] = size(data_color);
-        if section_ii == 2
+            % Show ROI
+            data_color = img_crop(data_color,[round(mean(ROI4Zoom_in, 1)),round(ROI4Zoom_in(2,:)-ROI4Zoom_in(1,:))],CropMode,1);
+            data_color = imresize(data_color, [900 900], "bicubic");
             % 加上colorbar
+            [Nx, Ny, ~] = size(data_color);
             Color_cb = fix(linspace(maxColorNum,1,ColorBar_height));
             Color_cb = ColorMap(Color_cb,:);
             Show_cb = permute(repmat(Color_cb,[1,1,ColorBar_width]),[1,3,2]);
-            x_cb = Ny - ColorBar_dispy - ColorBar_height;
-            y_cb = Nx - ColorBar_dispx - ColorBar_width;
+            x_cb = Nx - ColorBar_dispx - ColorBar_height;
+            y_cb = Ny - ColorBar_dispy - ColorBar_width;
             data_color(x_cb+1:x_cb+ColorBar_height,y_cb+1:y_cb+ColorBar_width,:) = Show_cb;
         end
+
+        [Nx, Ny, ~] = size(data_color);
+        % if section_ii == 2
+        %     % 加上colorbar
+        %     Color_cb = fix(linspace(maxColorNum,1,ColorBar_height));
+        %     Color_cb = ColorMap(Color_cb,:);
+        %     Show_cb = permute(repmat(Color_cb,[1,1,ColorBar_width]),[1,3,2]);
+        %     x_cb = Ny - ColorBar_dispy - ColorBar_height;
+        %     y_cb = Nx - ColorBar_dispx - ColorBar_width;
+        %     data_color(x_cb+1:x_cb+ColorBar_height,y_cb+1:y_cb+ColorBar_width,:) = Show_cb;
+        % end
         % 将其变为整型
         data_color = fix(data_color * 255);
         % 展示最初图像
@@ -173,34 +207,7 @@ for section_ii = section_all
             pause(3)
             first_time = 0;
         end
-
-        % % 标记时间
-        % for time_num = 1
-        %     text(tp_scale_x(frame_showfig)*Nx*zoom_times,tp_scale_y(frame_showfig)*Ny*zoom_times,{['Frame = ',num2str(frame_real(frame_raw-frame_raw_begin{1}+1))]},'color',bar_color,'FontName',Font_name,'FontSize',Font_Size_time(frame_showfig),'FontWeight','bold')
-        %     hold on
-        % end
-
-        % for Sbar_num = 1
-        %     % 标记scale_bar
-        %     Scale_bar(pd,length{section_ii}(frame_showfig,Sbar_num),LineWidth(frame_showfig,Sbar_num),Nx*zoom_times,Ny*zoom_times,(x_scale(frame_showfig)+x_scale_offset(Sbar_num)),y_scale(frame_showfig),bar_color,text_visible,Font_name,Font_Size_Sb(frame_showfig,Sbar_num),text_offset)%自创子函数
-        %     hold on
-        % end
-        % 标记ROI
-        if section_ii == 3
-            line([ROI4Activation(1,1),ROI4Activation(1,1),ROI4Activation(2,1),ROI4Activation(2,1),ROI4Activation(1,1)], ...
-                 [ROI4Activation(1,2),ROI4Activation(2,2),ROI4Activation(2,2),ROI4Activation(1,2),ROI4Activation(1,2)],'Color','red','LineStyle','--','LineWidth',1.5)
-        end
-        % 标记文字
-        for Char_temp=1:numel(section_char{section_ii}(:,1)) %显示所有需要显示的文字
-            Char_ii=section_char{section_ii}(Char_temp,1);%当前需要显示那段文字
-            if frame_showfig >= section_char{section_ii}(Char_temp,2) && frame_showfig <= section_char{section_ii}(Char_temp,3)%表示这个文字在这个帧数可以显示
-                text_x_ratio = interp1([1 frame_showfig_amount{section_ii}], [tl_scale_x1{Char_ii}(frame_showfig) tl_scale_x2{Char_ii}(frame_showfig)], frame_showfig);
-                text_x = text_x_ratio * Nx * zoom_times;
-                text_y = tl_scale_y{Char_ii}(frame_showfig) * Ny * zoom_times;
-                text(text_x,text_y,text_left{Char_ii},'color',tl_color{Char_ii},'FontName',Font_name,'FontSize',Font_Size_tl(frame_showfig),'FontWeight','bold','HorizontalAlignment','center');
-                hold on
-            end
-        end
+                
         if section_ii == 2
             % 标记colorbar的数字和序号
             for cbi = 1:2 % 先标colorbar的数字
@@ -209,15 +216,33 @@ for section_ii = section_all
                 text(text_x,text_y,text_cb{cbi},'color',[1,1,1],'FontName',Font_name,'FontSize',text_cb_fontsize,'HorizontalAlignment','center','FontWeight','bold');
                 hold on;
             end
+            hold off;
         end
-        if savejpeg == 1
-        f = getframe(h_fig); 
+        f = getframe(h_fig);
         f_small = f.cdata;
-        % size(f_small)
         f_small = imresize(f_small, [900 900], "bicubic");
         f_enlarge = uint8(zeros([enlarged_size 3]));
         f_enlarge(:,351:1250,:) = f_small(:,:,:);
-        imwrite(f_enlarge,[DataPath,'frame_save\image_900_',num2str(section_cnt),'_',num2str(frame_showfig,'%03d'),'.jpg']); 
+        close(h_fig);
+        h_fig = figure('Visible', 'off');
+        imshow(f_enlarge,[],'Border','tight','InitialMagnification',100)
+
+        % 标记文字
+        for Char_temp=1:numel(section_char{section_ii}(:,1)) %显示所有需要显示的文字
+            Char_ii=section_char{section_ii}(Char_temp,1);%当前需要显示那段文字
+            if frame_showfig >= section_char{section_ii}(Char_temp,2) && frame_showfig <= section_char{section_ii}(Char_temp,3)%表示这个文字在这个帧数可以显示
+                text_x_ratio = interp1([1 frame_showfig_amount{section_ii}], [tl_scale_x1{Char_ii}(frame_showfig) tl_scale_x2{Char_ii}(frame_showfig)], frame_showfig);
+                text_x = text_x_ratio * 900 * zoom_times;
+                text_y = tl_scale_y{Char_ii}(frame_showfig) * 1600 * zoom_times;
+                text(text_x,text_y,text_left{Char_ii},'color',tl_color{Char_ii},'FontName',Font_name,'FontSize',Font_Size_tl(frame_showfig),'FontWeight','bold','HorizontalAlignment','center');
+                hold on
+            end
+        end
+
+        if savejpeg == 1
+        f = getframe(h_fig); 
+        f_save = f.cdata;
+        imwrite(f_save,[DataPath,'frame_save\image_900_',num2str(section_cnt),'_',num2str(frame_showfig,'%03d'),'.jpg']); 
         end
         if image_write==1
             frame=getframe(gcf);

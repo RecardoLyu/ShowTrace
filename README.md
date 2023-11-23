@@ -8,24 +8,26 @@
 
 ## Section 1
 
-左上：before；
-
-Title：；
-
-右下：Scale bar；
+Title：Before activation；
 
 效果：简单展示activate之前的细胞
 
-## Section 2-难
 
-左上：after；
 
-Title：；
+## Section 3
 
-右下：Scale bar；
+Title：ROI of  405nm activation；
+
+效果：标记激活区域并Zoom in到ROI
+
+## Section 2
+
+Title：after 405nm activation；
 
 效果：跟踪左上方细胞中的荧光部分并画出移动轨迹热度图（based on timescale）
 
+
+---
 
 
 ## 2023年11月16日新增要求：
@@ -36,9 +38,11 @@ Title：；
 
 - ~~后续增加ROI_Zoomin和ROI_Activate；~~
 
-- 实现Zoom in，这里还需要加一段Section 4——考虑先画线再最后直接Zoom in
+- ~~实现Zoom in，这里还需要加一段Section 4——考虑先画线再最后直接Zoom in~~
 
-- ~~加粗~~加密绘制的曲线，~~调整ColorMap~~，增大对比度；
+- ~~加粗~~~~加密~~绘制的曲线，~~调整ColorMap~~；
+
+- ~~增大对比度（加一个高斯窗调制？）；~~
 
 - ~~初始帧亮度降低；~~
 

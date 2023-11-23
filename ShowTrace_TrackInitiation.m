@@ -3,11 +3,11 @@
 % v3.5, adjust the colormap
 fprintf('TrackInitiation...\n')
 Track_data = load(TrackPath,'-mat').track_data;
-Track_data = adjust_trace_width(Track_data(:,1:4));
+% Track_data = adjust_trace_width(Track_data(:,1:4));
 
 %% define the colormat of the trace
 maxTrackSpots = 113;
-maxColorNum = maxTrackSpots * 3;
+maxColorNum = maxTrackSpots*10;
 ColorMap = jet(round(maxColorNum*1.8));
 % to avoid the overlap of blackground and dark lines
 ColorMap = ColorMap(round(maxColorNum*0.4)+1:round(maxColorNum*0.4)+maxColorNum,:);
