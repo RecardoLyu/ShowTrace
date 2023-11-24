@@ -7,7 +7,7 @@ Track_data = load(TrackPath,'-mat').track_data;
 
 %% define the colormat of the trace
 maxTrackSpots = 113;
-maxColorNum = maxTrackSpots*10;
+maxColorNum = maxTrackSpots*20;
 ColorMap = jet(round(maxColorNum*1.8));
 % to avoid the overlap of blackground and dark lines
 ColorMap = ColorMap(round(maxColorNum*0.4)+1:round(maxColorNum*0.4)+maxColorNum,:);

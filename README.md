@@ -12,8 +12,6 @@ Title：Before activation；
 
 效果：简单展示activate之前的细胞
 
-
-
 ## Section 3
 
 Title：ROI of  405nm activation；
@@ -28,7 +26,6 @@ Title：after 405nm activation；
 
 
 ---
-
 
 ## 2023年11月16日新增要求：
 
@@ -49,3 +46,11 @@ Title：after 405nm activation；
 ## 2023年11月17日增加要求：
 
 - ~~更改画面比例为16：9，画面填充在中间，其余背景部分黑色填充~~
+
+## 2023年11月24日增加要求：
+
+- ~~colorbar 右移一些~~
+- ~~算出来细胞边界加上去，紫色？~~
+- ~~activation ROI加上其他两块~~
+- 加上scale bar，~~再增加一些点~~
+- ~~背景稍微亮一点~~
