@@ -1,12 +1,13 @@
 %% 把 new_main_dir 中存好的图片制作成视频
 
-video_name = [DataPath 'Movie-v4.2-section-' replace(num2str(section_all),'  ','-') '.mp4'];
+video_name = ['.\resource\Movie-v4.3-section-' replace(num2str(section_all),'  ','-') '.mp4'];
 
-animation = VideoWriter(video_name,'MPEG-4');%待合成的视频(不仅限于avi格式)的文件路径
+animation = VideoWriter(video_name,'MPEG-4');%待合成的视频的文件路径
 %%%%%%%%%%%%%%%%%%%%
 % 使用VideoWriter建立视频对象 animation，并设置相关参数（例如帧率等）
 animation.FrameRate = 20;
 animation.Quality = 100;
+
 
 %%%%%%%%%%%%%%%%%%%%
 open(animation);

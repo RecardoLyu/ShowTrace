@@ -28,6 +28,7 @@ make_video = 1;
 savejpeg = 1;
 section_all = [1 3 2];% the demo is divided for 2 sections as below
 %1 shows a static image for 40 frames, which is before activation
+%3 shows the activation area and zoom-in to ROI
 %2 shows dynamic images for 113 frames, which is after activation
 section_cnt = 1;
 zoom_times = 1;
@@ -106,8 +107,6 @@ for section_ii = section_all
             before_data_adjust = imgintensity_cut(data{1}(:,:,frame_raw),gray_range_statistic(1,1),65535,gamma(1),1);%灰度分布0-1
             before_data_adjust = img_crop(before_data_adjust,crop_info(frame_showfig,:),CropMode,1);
             before_data_adjust = repmat(before_data_adjust,1,1,3);
-            % [Ny, Nx, ~] = size(before_data_adjust);
-            % data_color = ColorMap(floor(before_data_adjust(:)*255)+1,:);
             data_color = before_data_adjust;
             data_color = imresize(data_color,[900 900],'bicubic');
         % -----------------------------------------------------------
@@ -137,10 +136,12 @@ for section_ii = section_all
             % 加上高斯窗调制幅度:中心在activation的中间，范围是Zoom in的区域
             I_before = after_data_adjust(ROI4Zoom_in(1,1): ROI4Zoom_in(2,1),ROI4Zoom_in(1,2): ROI4Zoom_in(2,2));
             after_data_adjust(ROI4Zoom_in(1,1): ROI4Zoom_in(2,1),ROI4Zoom_in(1,2): ROI4Zoom_in(2,2)) = after_data_adjust(ROI4Zoom_in(1,1): ROI4Zoom_in(2,1),ROI4Zoom_in(1,2): ROI4Zoom_in(2,2)).* mask_gaussian;
-            % I_after = after_data_adjust(ROI4Zoom_in(1,1): ROI4Zoom_in(2,1),ROI4Zoom_in(1,2): ROI4Zoom_in(2,2));
-            % I_before = uint8(fix(I_before*255));
-            % I_after = uint8(fix(I_after*255));
-            % figure(),subplot(1,2,1),imshow(I_before),subplot(1,2,2),imshow(I_after)
+            I_after = after_data_adjust(ROI4Zoom_in(1,1): ROI4Zoom_in(2,1),ROI4Zoom_in(1,2): ROI4Zoom_in(2,2));
+            I_before = uint8(fix(I_before*255));
+            I_after = uint8(fix(I_after*255));
+            fig_tmp = figure();
+            subplot(1,2,1),imshow(I_before),subplot(1,2,2),imshow(I_after)
+            waitforbuttonpress();
             after_data_adjust = repmat(after_data_adjust,1,1,3);
             % overwrite the pixel with the color determined by ColorMap and our data_draw
             if frame_raw == 1
@@ -184,15 +185,6 @@ for section_ii = section_all
         end
 
         [Nx, Ny, ~] = size(data_color);
-        % if section_ii == 2
-        %     % 加上colorbar
-        %     Color_cb = fix(linspace(maxColorNum,1,ColorBar_height));
-        %     Color_cb = ColorMap(Color_cb,:);
-        %     Show_cb = permute(repmat(Color_cb,[1,1,ColorBar_width]),[1,3,2]);
-        %     x_cb = Ny - ColorBar_dispy - ColorBar_height;
-        %     y_cb = Nx - ColorBar_dispx - ColorBar_width;
-        %     data_color(x_cb+1:x_cb+ColorBar_height,y_cb+1:y_cb+ColorBar_width,:) = Show_cb;
-        % end
         % 将其变为整型
         data_color = fix(data_color * 255);
         % 展示最初图像
@@ -283,7 +275,6 @@ for section_ii = section_all
             close(h_fig);
             frame_save_num=frame_save_num+1;
         end
-
     end
 section_cnt = section_cnt + 1;
 end
