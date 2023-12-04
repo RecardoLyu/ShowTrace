@@ -119,7 +119,7 @@ for section_ii = section_all
             ROI_data = imgintensity_cut(data{2}(:,:,frame_raw), gray_range_statistic(1,1),65535,gamma(1),1);% 调整灰度分布
             Cell_boundary_raw = imgintensity_cut(data{3}(:,:,frame_raw), gray_range_statistic(1,1),65535,gamma(1),1);% 调整灰度分布
             % ROI_data = repmat(ROI_data,1,1,3);
-            Cell_boundary = get_boundary(Cell_boundary_raw, ROI4Zoom_in);
+            Cell_boundary = get_boundary(Cell_boundary_raw, ROI4Zoom_in, frame_raw);
             data_layer1 = ROI_data;
             data_layer2 = ROI_data;
             data_layer3 = ROI_data;
@@ -163,7 +163,7 @@ for section_ii = section_all
             after_data_adjust = imgintensity_cut(data{2}(:,:,frame_raw),gray_intensity(1),gray_intensity(2),gamma(2),1);%灰度分布0-1
             Cell_boundary_raw = imgintensity_cut(data{3}(:,:,frame_raw),gray_range_statistic(114+frame_raw, 1),gray_range_statistic(114+frame_raw, 2),gamma(3),1);
             % detect the boundary
-            Cell_boundary = get_boundary(Cell_boundary_raw, ROI4Zoom_in);
+            Cell_boundary = get_boundary(Cell_boundary_raw, ROI4Zoom_in,frame_raw);
             after_data_adjust = img_crop(after_data_adjust,crop_info(frame_showfig,:),CropMode,1);
             Cell_boundary = img_crop(Cell_boundary,crop_info(frame_showfig,:),CropMode,1);
             % 加上高斯窗调制幅度:中心在activation的中间，范围是Zoom in的区域
