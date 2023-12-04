@@ -181,31 +181,37 @@ for section_ii = section_all
             after_data_adjust(:,:,3) = data_layer3;
             % after_data_adjust = repmat(after_data_adjust,1,1,3);
             % overwrite the pixel with the color determined by ColorMap and our data_draw
-            if frame_raw == 1
-                for spot_idx = 1: num_spots{frame_raw, 1}
-                    after_data_adjust(data_draw{frame_raw}(spot_idx, 4),data_draw{frame_raw}(spot_idx, 3),:) = ColorMap(data_draw{frame_raw}(spot_idx,2),:);
-                end
-            else  % 使用插值计算连续曲线的位置
-                data_draw_temp = data_draw{min(frame_raw + 1, 113)};
-                curve_num = numel(num_spots{frame_raw, 2});
-                single_curve = cell(curve_num, 1);
-                for curve_id = 1: curve_num
-                    % single curve 保存的是每条曲线当前的点的数量
-                    single_curve{curve_id} = data_draw{frame_raw}(data_draw{frame_raw}(:,1)==num_spots{frame_raw, 2}(curve_id),:);
-                    % 生成插值后的节点——xx:x坐标, yy: y坐标, tt: t坐标
-                    [xx, yy, tt] = my_interp(single_curve{curve_id}(:,4),single_curve{curve_id}(:,3),20.*single_curve{curve_id}(:,2)-19,19);
-                    xx = round(xx);
-                    yy = round(yy);
-                    tt = round(tt);
-                    % track_tmp = adjust_trace_width([xx, yy, tt]);
-                    % xx = track_tmp(:,1);
-                    % yy = track_tmp(:,2);
-                    % tt = track_tmp(:,3);
-                    % draw a continuous line
-                    for i = 1: numel(xx)
-                        after_data_adjust(xx(i),yy(i),:) = ColorMap(tt(i),:);
-                    end
-                end           
+            % ****************************************************************************************
+            % 以下为被弃用的方案
+            % if frame_raw == 1
+            %     for spot_idx = 1: num_spots{frame_raw, 1}
+            %         after_data_adjust(data_draw{frame_raw}(spot_idx, 4),data_draw{frame_raw}(spot_idx, 3),:) = ColorMap(data_draw{frame_raw}(spot_idx,2),:);
+            %     end
+            % else  % 使用插值计算连续曲线的位置
+            %     data_draw_temp = data_draw{min(frame_raw + 1, 113)};
+            %     curve_num = numel(num_spots{frame_raw, 2});
+            %     single_curve = cell(curve_num, 1);
+            %     for curve_id = 1: curve_num
+            %         % single curve 保存的是每条曲线当前的点的数量
+            %         single_curve{curve_id} = data_draw{frame_raw}(data_draw{frame_raw}(:,1)==num_spots{frame_raw, 2}(curve_id),:);
+            %         % 生成插值后的节点——xx:x坐标, yy: y坐标, tt: t坐标
+            %         [xx, yy, tt] = my_interp(single_curve{curve_id}(:,4),single_curve{curve_id}(:,3),20.*single_curve{curve_id}(:,2)-19,19);
+            %         xx = round(xx);
+            %         yy = round(yy);
+            %         tt = round(tt);
+            %         % track_tmp = adjust_trace_width([xx, yy, tt]);
+            %         % xx = track_tmp(:,1);
+            %         % yy = track_tmp(:,2);
+            %         % tt = track_tmp(:,3);
+            %         % draw a continuous line
+            %         for i = 1: numel(xx)
+            %             after_data_adjust(xx(i),yy(i),:) = ColorMap(tt(i),:);
+            %         end
+            %     end           
+            % end
+            % *********************************************************************************
+            for spot_idx = 1: num_spots{frame_raw, 1}
+                after_data_adjust(data_draw{frame_raw}(spot_idx, 4),data_draw{frame_raw}(spot_idx, 3),:) = ColorMap(data_draw{frame_raw}(spot_idx,2),:);
             end
             data_color = after_data_adjust;
             % Show ROI

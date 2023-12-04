@@ -83,7 +83,7 @@ text_cb = cell(1,2);
 text_cb_x = zeros(1,2);
 text_cb_y = zeros(1,2);
 
-text_cb{1} = '113';%colorbar 上限
+text_cb{1} = '47';%colorbar 上限
 text_cb_x(1) = 0.79;
 text_cb_y(1) = 0.53;
 

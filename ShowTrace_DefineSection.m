@@ -42,7 +42,7 @@ length{3}(1:frame_showfig_amount{1}+1e2,1) = 3000;%scale_bar长度nm
 file_need{2} = [2 3];% the idx of file needed
 % raw frame range
 frame_raw_begin{2} = 1;
-frame_raw_end{2} = 113;
+frame_raw_end{2} = 47;
 frame_showfig_amount{2} = 3*(frame_raw_end{2} - frame_raw_begin{2} + 1);
 section_char{2} = [2 1 frame_showfig_amount{2};
                    5 1 frame_showfig_amount{2}];

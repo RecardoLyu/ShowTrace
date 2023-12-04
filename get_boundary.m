@@ -44,6 +44,6 @@ boundary = ~bwareaopen(boundary, 50000,8);
 SE = strel("disk",2);
 temp_in = imerode(boundary,SE);
 boundary = boundary - temp_in;
-imwrite(boundary,['./resource/boundary_',num2str(save_idx),'.png'])
+% imwrite(boundary,['./resource/boundary_',num2str(save_idx),'.png'])
 end
 

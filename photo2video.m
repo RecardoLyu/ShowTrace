@@ -1,6 +1,6 @@
 %% 把 new_main_dir 中存好的图片制作成视频
 
-video_name = ['.\resource\Movie-v5.5-section-' replace(num2str(section_all),'  ','-') '.mp4'];
+video_name = ['.\resource\Movie-v5.7-section-' replace(num2str(section_all),'  ','-') '.mp4'];
 
 animation = VideoWriter(video_name,'MPEG-4');%待合成的视频的文件路径
 %%%%%%%%%%%%%%%%%%%%
