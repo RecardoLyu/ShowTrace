@@ -36,6 +36,7 @@ section_cnt = 1;
 zoom_times = 1;
 attenuation_rate = 3;
 CropMode = 'c';%center模式：四个数字，前2定中心坐标，后2定ROI，数字也是image-J读取
+save_single_tiff = [1 1;3 1;2 47];
 
 %% Run these scripts to set parameters
 ShowTrace_SetDataPath;
@@ -274,6 +275,28 @@ for section_ii = section_all
         f_save = f.cdata;
         imwrite(f_save,[DataPath,'frame_save\image_900_',num2str(section_cnt),'_',num2str(frame_showfig,'%03d'),'.jpg']); 
         end
+
+        % %% if save single tiff
+        % f = getframe(h_fig); 
+        % f_save = f.cdata;
+        % if section_ii == save_single_tiff(1,1) && frame_raw == save_single_tiff(1,2)
+        %     before_data_adjust = imgintensity_cut(data{1}(:,:,1),gray_range_statistic(1,1),6*gray_range_statistic(1,2),gamma(1),1);%灰度分布0-1
+        %     before_data_adjust = img_crop(before_data_adjust,[round(mean(ROI4Zoom_in, 1)),round(ROI4Zoom_in(2,:)-ROI4Zoom_in(1,:)+1)],CropMode,1);
+        %     before_data_adjust = repmat(before_data_adjust,1,1,3);
+        %     data_color = before_data_adjust;
+        %     data_color = imresize(data_color,[900 900],'bicubic');
+        %     data_color = fix(data_color * 255);
+        %     h_fig = figure('Visible', 'off');
+        %     imshow(uint8(data_color),[],'Border','tight','InitialMagnification',100)
+        %     f = getframe(h_fig); 
+        %     f_save = f.cdata;
+        %     save_tiff(f_save,"./resource/BeforeActivation.tif")
+        % elseif section_ii == save_single_tiff(2,1) && frame_raw == save_single_tiff(2,2)
+        %     save_tiff(f_save(:,351:1250,:),"./resource/AfterActivation.tif")
+        % elseif section_ii == save_single_tiff(3,1) && frame_raw == save_single_tiff(3,2)
+        %     save_tiff(f_save(:,351:1250,:),"./resource/ShowTrace.tif")
+        % end
+        %% if save as tiff
         if image_write==1
             frame=getframe(gcf);
             frame_save=frame.cdata;

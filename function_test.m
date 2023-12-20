@@ -6,6 +6,7 @@ ROI4Zoom_in = [191    91   % 左上
                600   500]; % 右下
 data = data(:,:,1:3:139);
 % data = data(:,:,1:3:337);
+sing 
 %% get the first frame
 for save_idx = [103 104 107 111]
 close all
